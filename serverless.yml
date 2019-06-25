@@ -24,6 +24,8 @@ plugins:
 functions:
   greeting:
     handler: resolvers/queries/greeting.handler
+  project:
+    handler: resolvers/queries/project.handler
 
 package:
   individually: true
@@ -45,6 +47,11 @@ custom:
         field: greeting
         request: query-greeting-request.vtl
         response: query-greeting-response.vtl
+      - dataSource: lambda_query_project
+        type: Query #Query, Mutation, Subscription
+        field: project
+        request: query-project-request.vtl
+        response: query-project-response.vtl
     schema: "schema.graphql"
     serviceRole: "AppSyncServiceRole"
     dataSources:
@@ -55,6 +62,13 @@ custom:
           lambdaFunctionArn: { Fn::GetAtt: [GreetingLambdaFunction, Arn] }
           serviceRoleArn: { Fn::GetAtt: [AppSyncLambdaServiceRole, Arn] }
           functionName: greeting
+      - type: AWS_LAMBDA
+        name: lambda_query_project
+        description: "Lambda DataSource"
+        config:
+          lambdaFunctionArn: { Fn::GetAtt: [ProjectLambdaFunction, Arn] }
+          serviceRoleArn: { Fn::GetAtt: [AppSyncLambdaServiceRole, Arn] }
+          functionName: project
   appsync-emulator:
     # when using serverless-webpack it (by default) outputs all the build assets to `<projectRoot>/.webpack/service`
     # this will let appsync-offline know where to find those compiled files

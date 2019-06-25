@@ -4,4 +4,76 @@ schema {
 
 type Query {
   greeting(name: String): String
+  project(id: ID!): Project
+}
+
+type Project {
+  Id: String!
+  VariableSetId: String!
+  DeploymentProcessId: String!
+  ClonedFromProjectId: String
+  DiscreteChannelRelease: Boolean
+  IncludedLibraryVariableSetIds: [String!]!
+  DefaultToSkipIfAlreadyInstalled: Boolean
+  TenantedDeploymentMode: TenantedDeploymentModes!
+  DefaultGuidedFailureMode: DefaultGuidedFailureModes
+  VersioningStrategy: VersioningStrategy
+  ReleaseCreationStrategy: ReleaseCreationStrategy
+  Resources: ProjectResources
+}
+
+type VersioningStrategy {
+  Template: String
+  DonorPackage: DonorPackage
+  DonorPackageStepId: String
+}
+
+type DonorPackage {
+  DeploymentAction: String
+  PackageReference: String
+}
+
+type ReleaseCreationStrategy {
+  ChannelId: String
+  ReleaseCreationPackage: ReleaseCreationPackage
+}
+
+type ReleaseCreationPackage {
+  DeploymentAction: String
+  PackageReference: String
+}
+
+type ProjectResources {
+  Logo: String
+  Variables: ProjectVariables
+}
+
+type ProjectVariables {
+  Version: Int
+  Variables: [ProjectVariable!]!
+}
+
+type ProjectVariable {
+  Id: ID!
+  Name: String!
+  Value: String!
+  Description: String
+  Scope: ProjectVariableScope
+  IsEditable: Boolean
+  Type: String
+  IsSensitive: Boolean
+}
+
+type ProjectVariableScope {
+  Environment: [String]
+}
+
+enum DefaultGuidedFailureModes {
+  ENVIRONMENT_DEFAULT
+}
+
+enum TenantedDeploymentModes {
+  UNTENANTED
+  TENANTED
+  SSH
 }
