@@ -10,3 +10,5 @@ jspm_packages
 config.yml
 
 .DS_Store
+.webpack
+.dynamodb
