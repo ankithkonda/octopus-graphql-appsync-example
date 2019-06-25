@@ -14,8 +14,13 @@
     "noImplicitAny": true,
     "noFallthroughCasesInSwitch": true,
     "outDir": "lib",
-    "lib": ["es2018", "dom"]
+    "lib": [
+      "es2018"
+    ]
   },
+  "files": [
+    "globals.d.ts"
+  ],
   "exclude": [
     "node_modules",
     "lib",

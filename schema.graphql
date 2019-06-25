@@ -9,6 +9,8 @@ type Query {
 
 type Project {
   Id: String!
+  Name: String!
+  Description: String!
   VariableSetId: String!
   DeploymentProcessId: String!
   ClonedFromProjectId: String

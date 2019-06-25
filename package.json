@@ -12,7 +12,9 @@
     "lint:types": "tsc --noEmit --skipLibCheck",
     "deploy:dev": "sls deploy --stage dev",
     "deploy:prod": "sls deploy --stage prod",
-    "start": "sls offline start --stage local"
+    "start": "sls offline start --stage local",
+    "schema:download": "apollo service:download --endpoint=https://27juc7ydezd4zeiza3cmti7qwm.appsync-api.ap-southeast-2.amazonaws.com/graphql --header='x-api-key:da2-zyk7klej6rhe7fv3idqlfzboa4'",
+    "schema:generate-types": "apollo codegen:generate types --outputFlat --localSchemaFile=schema.json --target=typescript --includes=tests/*.ts --tagName=gql --no-addTypename --globalTypesFile=types/graphql-global-types.ts"
   },
   "husky": {
     "hooks": {
@@ -33,6 +35,8 @@
     "@conduitvc/dynamodb-emulator": "^0.5.3",
     "@types/aws-lambda": "^8.10.26",
     "@types/uuid": "^3.4.4",
+    "apollo": "^2.13.1",
+    "apollo-boost": "^0.4.3",
     "aws-sdk": "^2.469.0",
     "babel-loader": "^8.0.6",
     "babel-plugin-transform-remove-console": "^6.9.4",
@@ -60,6 +64,8 @@
     "webpack-node-externals": "^1.7.2"
   },
   "dependencies": {
+    "@types/axios": "^0.14.0",
+    "axios": "^0.19.0",
     "uuid": "^3.3.2"
   }
 }
