@@ -1,0 +1,7 @@
+schema {
+  query: Query # root query type
+}
+
+type Query {
+  greeting(name: String): String
+}

@@ -1,0 +1,65 @@
+{
+  "name": "serverless-appsync-template",
+  "version": "1.0.0",
+  "description": "Appsync Template",
+  "main": "index.js",
+  "author": "Ankith Konda",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "lint": "tslint 'resolvers/**/*.{ts}' -t verbose",
+    "lint:fix": "yarn lint --fix",
+    "lint:types": "tsc --noEmit --skipLibCheck",
+    "deploy:dev": "sls deploy --stage dev",
+    "deploy:prod": "sls deploy --stage prod",
+    "start": "sls offline start --stage local"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "yarn lint:types && lint-staged"
+    }
+  },
+  "lint-staged": {
+    "./**/*.{ts,tsx}": [
+      "tslint --fix -t verbose",
+      "git add"
+    ]
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.4.4",
+    "@babel/core": "^7.4.5",
+    "@babel/preset-env": "^7.4.5",
+    "@babel/preset-typescript": "^7.3.3",
+    "@conduitvc/dynamodb-emulator": "^0.5.3",
+    "@types/aws-lambda": "^8.10.26",
+    "@types/uuid": "^3.4.4",
+    "aws-sdk": "^2.469.0",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-transform-remove-console": "^6.9.4",
+    "eslint": "^5.16.0",
+    "eslint-config-prettier": "^4.3.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "husky": "^2.4.0",
+    "lint-staged": "^8.1.7",
+    "prettier": "^1.17.1",
+    "serverless-appsync-offline": "^1.3.3",
+    "serverless-appsync-plugin": "^1.1.2",
+    "serverless-dotenv-plugin": "^2.1.1",
+    "serverless-localstack": "^0.4.15",
+    "serverless-offline": "^5.0.1",
+    "serverless-offline-assume-role": "^1.0.0",
+    "serverless-pseudo-parameters": "^2.4.0",
+    "serverless-webpack": "^5.3.0",
+    "tslint": "^5.17.0",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-eslint-rules": "^5.4.0",
+    "tslint-plugin-prettier": "^2.0.1",
+    "typescript": "^3.5.1",
+    "webpack": "^4.33.0",
+    "webpack-cli": "^3.3.2",
+    "webpack-node-externals": "^1.7.2"
+  },
+  "dependencies": {
+    "uuid": "^3.3.2"
+  }
+}

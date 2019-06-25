@@ -1,0 +1,1 @@
+# Serverless AppSync Template

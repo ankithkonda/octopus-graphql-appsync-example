@@ -1,0 +1,37 @@
+{
+  "editor.formatOnSave": true,
+  "[javascript]": {
+    "editor.formatOnSave": false
+  },
+  "[typescript]": {
+    "editor.formatOnSave": false
+  },
+  "[typescriptreact]": {
+    "editor.formatOnSave": false
+  },
+  "eslint.autoFixOnSave": true,
+  "eslint.alwaysShowStatus": true,
+  "files.exclude": {},
+  "todo-tree.defaultHighlight": {
+    "icon": "cross",
+    "type": "text",
+    "foreground": "white",
+    "background": "red",
+    "opacity": 50,
+    "iconColour": "orange"
+  },
+  "todo-tree.customHighlight": {
+    "TODO": {
+      "icon": "check",
+      "type": "line"
+    },
+    "FIXME": {
+      "foreground": "black",
+      "iconColour": "yellow"
+    }
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.tslint": true
+  },
+  "tslint.alwaysShowRuleFailuresAsWarnings": false
+}
