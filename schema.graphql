@@ -13,6 +13,9 @@ type Project {
   Description: String!
   VariableSetId: String!
   DeploymentProcessId: String!
+    @deprecated(
+      reason: "This field is deprecated, support will be dropped in 06/2020, see https://github.com/octopus/issues/42"
+    )
   ClonedFromProjectId: String
   DiscreteChannelRelease: Boolean
   IncludedLibraryVariableSetIds: [String!]!
@@ -79,3 +82,7 @@ enum TenantedDeploymentModes {
   TENANTED
   SSH
 }
+
+# @deprecated(
+#   reason: "Field is deprecated, support will be dropped 05/2020, see - https://github.com/octopusapi/issue/23"
+# )
