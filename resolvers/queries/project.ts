@@ -7,103 +7,6 @@ interface HandlerEvent {
   arguments: ProjectVariables;
 }
 
-export const handler = async (
-  event: HandlerEvent
-): Promise<Project_project | { data: any; errorMessage: string; errorType: string }> => {
-  let response = null;
-
-  try {
-    response = await axios.get<RESTAPIProjectResponse>(
-      `https://ankithtest.octopus.app/api/projects/${event.arguments.id}`,
-      {
-        headers: {
-          'X-Octopus-ApiKey': process.env.API_KEY,
-        },
-      }
-    );
-    console.log('response', response);
-  } catch (error) {
-    console.log('error', error.response.data.ErrorMessage);
-    // throw new Error(error.response.data.ErrorMessage);
-    return { data: null, errorMessage: error.response.data.ErrorMessage, errorType: 'ERROR' };
-  }
-
-  const data = response.data;
-
-  try {
-    response = await axios.get(`https://ankithtest.octopus.app${data.Links.Logo}`, {
-      headers: {
-        'X-Octopus-ApiKey': process.env.API_KEY,
-      },
-    });
-  } catch (error) {
-    throw new Error(error.response.data.ErrorMessage).message;
-  }
-
-  const logoSVGString = response.data;
-
-  try {
-    response = await axios.get<RESTAPIVariables>(`https://ankithtest.octopus.app${data.Links.Variables}`, {
-      headers: {
-        'X-Octopus-ApiKey': process.env.API_KEY,
-      },
-    });
-  } catch (error) {
-    throw new Error(error.response.data.ErrorMessage).message;
-  }
-
-  const variables = response.data;
-
-  return {
-    Id: data.Id,
-    Name: data.Name,
-    Description: data.Description,
-    VariableSetId: data.VariableSetId,
-    DeploymentProcessId: data.DeploymentProcessId,
-    ClonedFromProjectId: data.ClonedFromProjectId,
-    DiscreteChannelRelease: data.DiscreteChannelRelease,
-    IncludedLibraryVariableSetIds: data.IncludedLibraryVariableSetIds,
-    DefaultToSkipIfAlreadyInstalled: data.DefaultToSkipIfAlreadyInstalled,
-    TenantedDeploymentMode:
-      data.TenantedDeploymentMode === RESTAPIProjectResponse_TenantedDeploymentModes.Untenanted
-        ? TenantedDeploymentModes.UNTENANTED
-        : TenantedDeploymentModes.SSH,
-    DefaultGuidedFailureMode:
-      data.DefaultGuidedFailureMode === RESTAPIProjectResponse_DefaultGuidedFailureModes.EnvironmentDefault
-        ? DefaultGuidedFailureModes.ENVIRONMENT_DEFAULT
-        : DefaultGuidedFailureModes.ENVIRONMENT_DEFAULT,
-    VersioningStrategy: {
-      Template: data.VersioningStrategy.Template,
-      DonorPackage: data.VersioningStrategy.DonorPackage,
-      DonorPackageStepId: null,
-    },
-    ReleaseCreationStrategy: {
-      ChannelId: data.ReleaseCreationStrategy.ChannelId,
-      ReleaseCreationPackage: data.ReleaseCreationStrategy.ReleaseCreationPackage,
-    },
-    Resources: {
-      Logo: logoSVGString,
-      Variables: {
-        Version: variables.Version,
-        Variables: [
-          ...variables.Variables.map(variable => ({
-            Id: variable.Id,
-            Name: variable.Name,
-            Value: variable.Value,
-            Description: variable.Description,
-            Scope: {
-              Environment: [...variable.Scope.Environment],
-            },
-            IsEditable: variable.IsEditable,
-            Type: variable.Type,
-            IsSensitive: variable.IsSensitive,
-          })),
-        ],
-      },
-    },
-  };
-};
-
 enum RESTAPIProjectResponse_TenantedDeploymentModes {
   Untenanted,
 }
@@ -189,3 +92,103 @@ interface RESTAPIVariables {
     }
   ];
 }
+
+export const handler = async (
+  event: HandlerEvent
+): Promise<Project_project | { data: any; errorMessage: string; errorType: string }> => {
+  let response = null;
+
+  try {
+    response = await axios.get<RESTAPIProjectResponse>(
+      `https://ankithtest.octopus.app/api/projects/${event.arguments.id}`,
+      {
+        headers: {
+          'X-Octopus-ApiKey': process.env.API_KEY,
+        },
+      }
+    );
+    console.log('response', response);
+  } catch (error) {
+    console.log('error', error.response.data.ErrorMessage);
+    // throw new Error(error.response.data.ErrorMessage);
+    return { data: null, errorMessage: error.response.data.ErrorMessage, errorType: 'ERROR' };
+  }
+
+  const data: RESTAPIProjectResponse = response.data;
+
+  let logoResponse = null;
+  try {
+    logoResponse = await axios.get(`https://ankithtest.octopus.app${data.Links.Logo}`, {
+      headers: {
+        'X-Octopus-ApiKey': process.env.API_KEY,
+      },
+    });
+  } catch (error) {
+    throw new Error(error.response.data.ErrorMessage).message;
+  }
+
+  const logoSVGString: string = logoResponse.data;
+
+  let variablesResponse = null;
+
+  try {
+    variablesResponse = await axios.get<RESTAPIVariables>(`https://ankithtest.octopus.app${data.Links.Variables}`, {
+      headers: {
+        'X-Octopus-ApiKey': process.env.API_KEY,
+      },
+    });
+  } catch (error) {
+    throw new Error(error.response.data.ErrorMessage).message;
+  }
+
+  const variables: RESTAPIVariables = variablesResponse.data;
+
+  return {
+    Id: data.Id,
+    Name: data.Name,
+    Description: data.Description,
+    VariableSetId: data.VariableSetId,
+    DeploymentProcessId: data.DeploymentProcessId,
+    ClonedFromProjectId: data.ClonedFromProjectId,
+    DiscreteChannelRelease: data.DiscreteChannelRelease,
+    IncludedLibraryVariableSetIds: data.IncludedLibraryVariableSetIds,
+    DefaultToSkipIfAlreadyInstalled: data.DefaultToSkipIfAlreadyInstalled,
+    TenantedDeploymentMode:
+      data.TenantedDeploymentMode === RESTAPIProjectResponse_TenantedDeploymentModes.Untenanted
+        ? TenantedDeploymentModes.UNTENANTED
+        : TenantedDeploymentModes.SSH,
+    DefaultGuidedFailureMode:
+      data.DefaultGuidedFailureMode === RESTAPIProjectResponse_DefaultGuidedFailureModes.EnvironmentDefault
+        ? DefaultGuidedFailureModes.ENVIRONMENT_DEFAULT
+        : DefaultGuidedFailureModes.ENVIRONMENT_DEFAULT,
+    VersioningStrategy: {
+      Template: data.VersioningStrategy.Template,
+      DonorPackage: data.VersioningStrategy.DonorPackage,
+      DonorPackageStepId: null,
+    },
+    ReleaseCreationStrategy: {
+      ChannelId: data.ReleaseCreationStrategy.ChannelId,
+      ReleaseCreationPackage: data.ReleaseCreationStrategy.ReleaseCreationPackage,
+    },
+    Resources: {
+      Logo: logoSVGString,
+      Variables: {
+        Version: variables.Version,
+        Variables: [
+          ...variables.Variables.map(variable => ({
+            Id: variable.Id,
+            Name: variable.Name,
+            Value: variable.Value,
+            Description: variable.Description,
+            Scope: {
+              Environment: [...variable.Scope.Environment],
+            },
+            IsEditable: variable.IsEditable,
+            Type: variable.Type,
+            IsSensitive: variable.IsSensitive,
+          })),
+        ],
+      },
+    },
+  };
+};
