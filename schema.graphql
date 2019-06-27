@@ -11,11 +11,12 @@ type Project {
   Id: String!
   Name: String!
   Description: String!
+  # This is a ID for the Variable Set
   VariableSetId: String!
-  DeploymentProcessId: String!
     @deprecated(
-      reason: "This field is deprecated, support will be dropped in 06/2020, see https://github.com/octopus/issues/42"
+      reason: "Support will be dropped in Q4/2020, see https://github.com/octopus/issues/43"
     )
+  DeploymentProcessId: String!
   ClonedFromProjectId: String
   DiscreteChannelRelease: Boolean
   IncludedLibraryVariableSetIds: [String!]!
